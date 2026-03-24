@@ -1,19 +1,7 @@
 {
-    "version": 2,
-    "builds": [
-     {
-
-        "src": "src/index.js",
-        "use": "@vercel/node"
-
-       }
-      ],
-
-      "routes": [
-        {
-
-         "src": "/( .* )",
-         "dest": "src/index.js"
-        }
-    ]
+  "rewrites": [
+    { "source": "/login", "destination": "/api/login" },
+    { "source": "/cadastrar", "destination": "/api/cadastrar" },
+    { "source": "/(.*)", "destination": "/$1" }
+  ]
 }
