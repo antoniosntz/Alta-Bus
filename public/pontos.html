@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Escolher Ponto</title>
+
+<link rel="stylesheet" href="style.css">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+
+<body>
+
+<div class="iphone-container">
+
+<button class="btn-voltar-topo" onclick="voltar()">
+        <i class='bx bx-chevron-left'></i> Voltar
+    </button>
+
+<h2>Escolha seu ponto</h2>
+<p class="subtitle">Selecione onde você vai pegar o ônibus</p>
+
+<div class="content">
+
+<select id="pontoSelect" class="input">
+
+<option value="">Selecione...</option>
+
+<option  value="-20.521139,-40.985417">Ponto 1 - Posto Castelinho</option>
+<option value="-20.596750,-41.023194">Ponto 2 - Posto Beira Rio</option>
+<option value="-20.604611,-41.028278">Ponto 3 - Campo de fruteiras</option>
+<option value="-20.618194,-41.024694">Ponto 4 - Departamento</option>
+<option value="-20.627472,-41.016222">Ponto 5 - Rancho da Lagoa</option>
+<option value="-20.636999,-41.014028">Ponto 6 - Ponte do AYD</option>
+<option value="-20.655694,-41.019333">Ponto 7 - Supermercado da Vila Esperança</option>
+<option value="-20.673694,-41.010972">Ponto 8 - Rodoviária de Vargem Alta</option>
+<option value="-20.706889,-41.027472">Ponto 9 - Oficina Jacigua</option>
+<option value="-20.705000,-41.019889">Ponto 10 - Casarão</option>
+<option value="-20.705500,-41.017694">Ponto 11 - Bar do Machados</option>
+<option value="-20.710750,-41.016222">Ponto 12 - Bar da Linha</option>
+<option value="-20.721583,-41.010861">Ponto 14 - CEET Giuseppe Altoe</option>
+
+</select>
+
+<button class="btn" onclick="continuar()">Continuar</button>
+
+</div>
+
+</div>
+
+<script>
+
+function continuar(){
+
+const ponto = document.getElementById("pontoSelect").value;
+
+if(!ponto){
+alert("Selecione um ponto");
+return;
+}
+
+const partes = ponto.split(",");
+
+const lat = partes[0];
+const lng = partes[1];
+
+localStorage.setItem("latPonto", lat);
+localStorage.setItem("lngPonto", lng);
+
+window.location.href = "cliente.html";
+
+}
+
+</script>
+
+<script>
+function voltar() {
+    // Se estiver na tela de pontos, volta para o login
+    // Se estiver na tela do cliente, mude para "pontos.html"
+    window.location.href = "login.html"; 
+}
+
+// Aproveite para conferir a função de entrar também:
+function fazerLogin() {
+    window.location.href = "pontos.html";
+}
+</script>
+
+</body>
+</html>

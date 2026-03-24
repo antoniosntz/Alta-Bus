@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AltaBus - Cadastro</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <style>
+        /* Reutilizando o estilo do seu stylelogin.css com os ajustes do botão */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a; /* Cor de fundo escura do AltaBus */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .login-container {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 20px;
+            width: 350px;
+            text-align: center;
+            position: relative; /* Importante para o botão Voltar */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Botão Voltar no Canto Superior Esquerdo */
+        .btn-voltar-topo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: transparent;
+            border: none;
+            color: #38bdf8; /* Cor solicitada */
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-voltar-topo:hover {
+            color: white;
+        }
+
+        .onibus-img {
+            width: 120px;
+            margin-bottom: 10px;
+        }
+
+        h2 { margin: 10px 0 5px; }
+        .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 25px; }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #94a3b8;
+        }
+
+        .input-with-icon {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .input-with-icon i { color: #38bdf8; margin-right: 10px; }
+
+        .input-with-icon input, .select-tipo {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 100%;
+            outline: none;
+        }
+
+        /* Estilo do Campo de Seleção */
+        .select-tipo {
+            cursor: pointer;
+        }
+        .select-tipo option {
+            background: #1e293b;
+            color: white;
+        }
+
+        .btn-entrar {
+            width: 100%;
+            padding: 12px;
+            background: #38bdf8;
+            border: none;
+            border-radius: 8px;
+            color: #0f172a;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-entrar:hover {
+            background: #7dd3fc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <button class="btn-voltar-topo" onclick="voltar()">
+            <i class='bx bx-chevron-left' style="font-size: 20px;"></i> Voltar
+        </button>
+
+        <img src="ALTA_BUS__3_-removebg-preview (2).png" alt="Ônibus" class="onibus-img">
+        
+        <h2>Criar Conta</h2>
+        <p class="subtitle">Cadastre-se para acompanhar o ônibus</p>
+        
+        <form class="login-form">
+            <div class="input-group">
+                <label for="nome">Nome Completo</label>
+                <div class="input-with-icon">
+                    <i class='bx bx-user'></i>
+                    <input type="text" id="nome" placeholder="Seu nome">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="email">E-mail</label>
+                <div class="input-with-icon">
+                    <i class='bx bx-envelope'></i>
+                    <input type="email" id="email" placeholder="exemplo@email.com">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="senha">Senha</label>
+                <div class="input-with-icon">
+                    <i class='bx bx-lock-alt'></i>
+                    <input type="password" id="senha" placeholder="........">
+                </div>
+            </div>
+
+           
+            <button type="button" class="btn-entrar" onclick="registrarUsuario()">Cadastrar</button>
+        </form>
+    </div>
+
+    <script>
+        // Função para voltar à tela de login
+        function voltar() {
+            window.location.href = "login.html";
+        }
+
+        // Função para enviar os dados ao servidor Node.js
+        async function registrarUsuario() {
+            const nome = document.getElementById("nome").value;
+            const email = document.getElementById("email").value;
+            const senha = document.getElementById("senha").value;
+            const tipo = document.getElementById("tipo").value;
+
+            if (!nome || !email || !senha) {
+                alert("Por favor, preencha todos os campos!");
+                return;
+            }
+
+            try {
+                const resposta = await fetch('/cadastrar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, email, senha, tipo })
+                });
+
+                const dados = await resposta.json();
+
+                if (dados.success) {
+                    alert("Cadastro realizado com sucesso!");
+                    window.location.href = "login.html";
+                } else {
+                    alert("Erro ao cadastrar: " + dados.message);
+                }
+            } catch (erro) {
+                console.error("Erro:", erro);
+                alert("Erro ao conectar com o servidor. Verifique se o Node.js está rodando.");
+            }
+        }
+    </script>
+</body>
+</html>
