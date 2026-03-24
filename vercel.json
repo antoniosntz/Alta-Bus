@@ -1,7 +1,12 @@
 {
-  "rewrites": [
-    { "source": "/login", "destination": "/api/login" },
-    { "source": "/cadastrar", "destination": "/api/cadastrar" },
-    { "source": "/(.*)", "destination": "/$1" }
+  "version": 2,
+  "builds": [
+    { "src": "servidor.js", "use": "@vercel/node" },
+    { "src": "*.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/login", "dest": "/servidor.js" },
+    { "src": "/cadastrar", "dest": "/servidor.js" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }

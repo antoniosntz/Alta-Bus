@@ -164,8 +164,10 @@
             window.location.href = "login.html";
         }
 
+      /*  
         // Função para enviar os dados ao servidor Node.js
         async function registrarUsuario() {
+
             const nome = document.getElementById("nome").value;
             const email = document.getElementById("email").value;
             const senha = document.getElementById("senha").value;
@@ -196,6 +198,34 @@
                 alert("Erro ao conectar com o servidor. Verifique se o Node.js está rodando.");
             }
         }
+        */
+
+        async function registrarUsuario() {
+    const nome = document.getElementById("nome").value;
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+   
+    try {
+        const resposta = await fetch('/cadastrar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome, email, senha })
+        });
+
+        const dados = await resposta.json();
+
+        if (dados.success) {
+            alert("Usuário cadastrado com sucesso!");
+            window.location.href = "login.html";
+        } else {
+            alert(dados.message);
+        }
+    } catch (erro) {
+        console.error("Erro ao cadastrar:", erro);
+    }
+}
+
+
     </script>
 </body>
 </html>
