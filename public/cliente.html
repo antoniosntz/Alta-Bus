@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AltaBus - Cliente</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+   
+<div class="iphone-container">
+    <div class="logo-area">
+        <h2>AltaBus</h2>
+    </div>
+
+    <h2>Ônibus Escolar</h2>
+    <p class="subtitle">Acompanhe a chegada</p>
+
+    <div class="content">
+        <div class="info-box">
+            <i class='bx bx-bus'></i>
+            <p>Distância</p>
+            <h3 id="distancia">-- km</h3>
+        </div>
+
+        <div class="info-box">
+            <i class='bx bx-time'></i>
+            <p>Tempo estimado</p>
+            <h3 id="tempo">-- min</h3>
+        </div>
+
+        <div class="info-box">
+            <i class='bx bx-traffic'></i>
+            <p>Status</p>
+            <h3 id="status">Calculando...</h3>
+        </div>
+    </div>
+
+    <div class="ponto-card">
+        <p>Seu ponto</p>
+        <h3 id="ponto" class="ponto-nome">--</h3>
+    </div>
+
+   
+    <button class="btn-voltar-topo" onclick="voltar()">
+        <i class='bx bx-chevron-left'></i> Voltar
+    </button>
+
+   
+    
+    </div>
+
+</div>
+
+<script>
+const pontos = [
+    {nome:"Ponto 1 - Posto Castelinho", lat:-20.521139, lng:-40.985417},
+    {nome:"Ponto 2 - Posto Beira Rio", lat:-20.596750, lng:-41.023194},
+    {nome:"Ponto 3 - Campo de fruteiras", lat:-20.604611, lng:-41.028278},
+    {nome:"Ponto 4 - Departamento", lat:-20.618194, lng:-41.024694},
+    {nome:"Ponto 5 - Rancho da Lagoa", lat:-20.627472, lng:-41.016222},
+    {nome:"Ponto 6 - Ponte do AYD", lat:-20.636999, lng:-41.014028},
+    {nome:"Ponto 7 - Supermercado da Vila Esperança", lat:-20.655694, lng:-41.019333},
+    {nome:"Ponto 8 - Rodoviária de Vargem Alta", lat:-20.673694, lng:-41.010972},
+    {nome:"Ponto 9 - Oficina Jacigua", lat:-20.706889, lng:-41.027472},
+    {nome:"Ponto 10 - Casarão", lat:-20.705000, lng:-41.019889},
+    {nome:"Ponto 11 - Bar do Machados", lat:-20.705500, lng:-41.017694},
+    {nome:"Ponto 12 - Bar da Linha", lat:-20.710750, lng:-41.016222},
+    {nome:"Ponto 14 - CEET Giuseppe Altoe", lat:-20.721583, lng:-41.010861}
+];
+
+const lat = parseFloat(localStorage.getItem("latPonto"));
+const lng = parseFloat(localStorage.getItem("lngPonto"));
+
+const pontoEncontrado = pontos.find(p => p.lat === lat && p.lng === lng);
+if(pontoEncontrado){
+    document.getElementById("ponto").innerText = pontoEncontrado.nome;
+}
+
+
+async function atualizarDados() {
+    // Pegamos o nome do ponto que você já encontrou no início do script
+    const nomeDoPonto = pontoEncontrado ? pontoEncontrado.nome : null;
+
+    if (!nomeDoPonto) {
+        document.getElementById("status").innerText = "Ponto não selecionado";
+        return;
+    }
+
+    try {
+        // Agora enviamos o NOME do ponto, como o servidor espera
+        const resposta = await fetch(`/tempo?ponto=${encodeURIComponent(nomeDoPonto)}`);
+        const dados = await resposta.json();
+
+        // Atualiza a tela com os dados reais
+        document.getElementById("distancia").innerText = dados.distancia_km + " km";
+        document.getElementById("tempo").innerText = dados.tempo_min + " min";
+        
+        // Lógica de status
+        if (parseFloat(dados.distancia_km) < 0.05) {
+            document.getElementById("status").innerText = "Ônibus chegou!";
+        } else {
+            document.getElementById("status").innerText = "A caminho...";
+        }
+
+    } catch (e) {
+        document.getElementById("status").innerText = "Erro ao conectar";
+    }
+}
+
+setInterval(atualizarDados, 10000); // Atualiza a cada 10 segundos
+atualizarDados();
+</script>
+
+<script>
+function voltar() {
+    // Se estiver na tela de pontos, volta para o login
+    // Se estiver na tela do cliente, mude para "pontos.html"
+    window.location.href = "pontos.html"; 
+}
+
+// Aproveite para conferir a função de entrar também:
+function fazerLogin() {
+    window.location.href = "pontos.html";
+}
+</script>
+
+</body>
+</html>

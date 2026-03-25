@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Painel do Motorista</title>
+
+<link rel="stylesheet" href="style.css">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+
+<body>
+
+<div class="iphone-container">
+
+    <div class="logo-area">
+        <h2>AltaBus</h2>
+    </div>
+
+    <h2>Painel do Motorista</h2>
+    <p class="subtitle">Envio automático de localização</p>
+
+    <div class="content">
+
+        <div class="info-box">
+            <i class='bx bx-signal-5'></i>
+            <p>Status</p>
+            <h3 id="status">Iniciando...</h3>
+        </div>
+
+        <div class="info-box">
+            <i class='bx bx-map'></i>
+            <p>Latitude</p>
+            <h3 id="lat">--</h3>
+        </div>
+
+        <div class="info-box">
+            <i class='bx bx-map-pin'></i>
+            <p>Longitude</p>
+            <h3 id="lng">--</h3>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function iniciarGPS(){
+
+    if(!navigator.geolocation){
+
+        alert("GPS não suportado");
+        return;
+
+    }
+
+    navigator.geolocation.watchPosition(async function(pos){
+
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        document.getElementById("lat").innerText = lat.toFixed(6);
+        document.getElementById("lng").innerText = lng.toFixed(6);
+
+        try{
+
+            await fetch("/localizacao",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({lat,lng})
+            });
+
+            document.getElementById("status").innerText =
+                "Localização enviada";
+
+        }catch{
+
+            document.getElementById("status").innerText =
+                "Erro ao enviar";
+
+        }
+
+    });
+
+}
+
+iniciarGPS();
+
+</script>
+
+</body>
+</html>
