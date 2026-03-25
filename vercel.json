@@ -12,6 +12,11 @@
     { "src": "/login.html", "dest": "/public/login.html" },
     { "src": "/cadastro.html", "dest": "/public/cadastro.html" },
     { "src": "/motorista.html", "dest": "/public/motorista.html" },
+    { "src": "/cliente.html", "dest": "/public/cliente.html" },
+    { "src": "/pontos.html", "dest": "/public/pontos.html" },
+    { "src": "/script.js", "dest": "/public/script.js" },
+    { "src": "/style.css", "dest": "/public/style.css" },
+    { "src": "/stylelogin.css", "dest": "/public/stylelogin.css" },
     { "src": "/(.*)", "dest": "/public/index.html" }
   ]
 }
