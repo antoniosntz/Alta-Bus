@@ -5,10 +5,11 @@
     { "src": "*.html", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/", "dest": "/index.html" },
     { "src": "/login", "dest": "/servidor.js" },
     { "src": "/cadastrar", "dest": "/servidor.js" },
-    { "src": "/(.*)", "dest": "index.html"}
+    { "src": "/localizacao", "dest": "/servidor.js" },
+    { "src": "/tempo", "dest": "/servidor.js" },
+    { "src": "/(.*)", "dest": "/public/index.html"}
     
     
   ]
