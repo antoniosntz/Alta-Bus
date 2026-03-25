@@ -8,6 +8,8 @@
     { "src": "/", "dest": "/index.html" },
     { "src": "/login", "dest": "/servidor.js" },
     { "src": "/cadastrar", "dest": "/servidor.js" },
-    { "src": "/(.*)", "dest": "/$1" }
+    { "src": "/(.*)", "dest": "index.html"}
+    
+    
   ]
 }
