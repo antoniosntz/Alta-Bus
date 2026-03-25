@@ -17,6 +17,7 @@
     { "src": "/script.js", "dest": "/public/script.js" },
     { "src": "/style.css", "dest": "/public/style.css" },
     { "src": "/stylelogin.css", "dest": "/public/stylelogin.css" },
+    { "src": "/ALTA_BUS__3_-removebg-preview (2).png", "dest": "/public/ALTA_BUS__3_-removebg-preview (2).png" },
     { "src": "/(.*)", "dest": "/public/index.html" }
   ]
 }
