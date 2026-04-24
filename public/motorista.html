@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AltaBus - Painel do Motorista</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <style>
+        /* ==========================================
+           RESET E BASE
+        ========================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-color: #0f172a; /* Fundo escuro igual ao resto do site */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        /* ==========================================
+           CONTAINER PRINCIPAL (ESTILO CELULAR)
+        ========================================== */
+        .driver-container {
+            width: 100%;
+            max-width: 380px;
+            height: 90vh; /* Altura quase cheia da tela */
+            max-height: 750px;
+            background: #111827; /* Azul bem escuro */
+            border-radius: 30px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column; /* Alinha os itens de cima para baixo */
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Botão Voltar/Sair */
+        .btn-voltar {
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        /* ==========================================
+           TÍTULOS (COMBINANDO COM O DESIGN)
+        ========================================== */
+        .brand-name {
+            color: #38bdf8; /* Azul clássico do seu projeto */
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .page-title {
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        /* ==========================================
+           CARDS DE LOCALIZAÇÃO (MEIO)
+        ========================================== */
+        .info-card {
+            background: rgba(30, 41, 59, 0.5); /* Fundo cinza azulado do seu padrão */
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .info-card i {
+            font-size: 20px;
+            color: #38bdf8;
+        }
+
+        .info-card p {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .info-card h3 {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* ==========================================
+           ABA DE OCORRÊNCIAS (EMPURRADA PARA BAIXO)
+        ========================================== */
+        .ocorrencias-container {
+            margin-top: auto; /* ESTA REGRA EMPURRA O CARD PARA O FUNDO DA TELA */
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .ocorrencias-container h4 {
+            color: #38bdf8;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .ocorrencias-container .desc {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        /* Grid de Botões */
+        .grid-botoes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 15px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #1e293b;
+            color: #94a3b8;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-status i {
+            font-size: 22px;
+        }
+
+        .btn-status span {
+            font-size: 12px;
+        }
+
+        /* Estados ativos dos botões */
+        .btn-status.active {
+            color: #0f172a;
+        }
+
+        .btn-status.normal.active { background: #22c55e; }
+        .btn-status.alerta.active { background: #eab308; }
+        .btn-status.critico.active { background: #ef4444; }
+    </style>
+</head>
+<body>
+
+    <div class="driver-container">
+        
+        <a href="login.html" class="btn-voltar">
+            <i class='bx bx-chevron-left'></i> Voltar
+        </a>
+
+        <div class="brand-name">AltaBus</div>
+        <div class="page-title">Painel do Motorista</div>
+        <div class="subtitle">Envio automático de localização</div>
+
+        <div class="info-card">
+            <i class='bx bx-bar-chart-alt-2'></i>
+            <p>Status</p>
+            <h3 id="status-texto">Localização enviada</h3>
+        </div>
+
+        <div class="info-card">
+            <i class='bx bxs-map-pin'></i>
+            <p>Latitude</p>
+            <h3 id="lat-texto">-20.858900</h3>
+        </div>
+
+        <div class="info-card">
+            <i class='bx bxs-map-pin'></i>
+            <p>Longitude</p>
+            <h3 id="lng-texto">-41.117000</h3>
+        </div>
+
+        <div class="ocorrencias-container">
+            <h4><i class='bx bx-error-circle'></i> Reportar Ocorrência</h4>
+            <p class="desc">Selecione se houver algum imprevisto com a rota ou o veículo:</p>
+            
+            <div class="grid-botoes">
+                <button class="btn-status normal active" onclick="mudarStatus('normal', this)">
+                    <i class='bx bx-check-circle'></i>
+                    <span>Tudo Normal</span>
+                </button>
+
+                <button class="btn-status alerta" onclick="mudarStatus('transito', this)">
+                    <i class='bx bx-traffic'></i>
+                    <span>Trânsito Lento</span>
+                </button>
+
+                <button class="btn-status critico" onclick="mudarStatus('quebrado', this)">
+                    <i class='bx bx-wrench'></i>
+                    <span>Ônibus Quebrou</span>
+                </button>
+
+                <button class="btn-status alerta" onclick="mudarStatus('desvio', this)">
+                    <i class='bx bx-navigation'></i>
+                    <span>Rota Desviada</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Função para alternar a cor dos botões ao clicar e enviar pro servidor
+        function mudarStatus(tipo, botao) {
+            const botoes = document.querySelectorAll('.btn-status');
+            botoes.forEach(b => b.classList.remove('active'));
+            botao.classList.add('active');
+
+            // Envia a informação do status selecionado para o seu servidor Node.js
+            fetch('/atualizar-status-onibus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: tipo })
+            })
+            .then(resposta => {
+                if (resposta.ok) {
+                    console.log("Status enviado ao servidor: " + tipo);
+                }
+            })
+            .catch(erro => console.error("Erro ao reportar status:", erro));
+        }
+    </script>
+</body>
+</html>
