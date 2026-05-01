@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+enum TipoUsuario {
+  motorista
+  cliente
+}
+
+model Usuario {
+  id          String              @id @default(uuid()) @db.Uuid
+  nome        String              @db.VarChar(150)
+  email       String              @unique @db.VarChar(150)
+  senhaHash   String              @map("senha_hash")
+  tipo        TipoUsuario         @default(cliente)
+  ativo       Boolean             @default(true)
+  criadoEm    DateTime            @default(now()) @map("criado_em")
+  atualizadoEm DateTime           @updatedAt @map("atualizado_em")
+  sessoes     Sessao[]
+  localizacoes LocalizacaoOnibus[]
+
+  @@map("usuarios")
+}
+
+model Sessao {
+  id        String   @id @default(uuid()) @db.Uuid
+  usuarioId String   @map("usuario_id") @db.Uuid
+  token     String   @unique
+  expiraEm  DateTime @map("expira_em")
+  criadoEm  DateTime @default(now()) @map("criado_em")
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId])
+  @@map("sessoes")
+}
+
+model Ponto {
+  id        String   @id @default(uuid()) @db.Uuid
+  nome      String   @unique @db.VarChar(200)
+  latitude  Decimal  @db.Decimal(10, 6)
+  longitude Decimal  @db.Decimal(10, 6)
+  ordem     Int?
+  ativo     Boolean  @default(true)
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  @@map("pontos")
+}
+
+model LocalizacaoOnibus {
+  id                 String    @id @default(uuid()) @db.Uuid
+  usuarioMotoristaId String?   @map("usuario_motorista_id") @db.Uuid
+  latitude           Decimal   @db.Decimal(10, 6)
+  longitude          Decimal   @db.Decimal(10, 6)
+  atualizadoEm       DateTime  @default(now()) @map("atualizado_em")
+  motorista          Usuario?  @relation(fields: [usuarioMotoristaId], references: [id], onDelete: SetNull)
+
+  @@index([atualizadoEm(sort: Desc)])
+  @@map("localizacoes_onibus")
+}
