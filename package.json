@@ -1,0 +1,32 @@
+{
+  "name": "alta-bus",
+  "version": "2.0.0",
+  "description": "AltaBus - Rastreamento de ônibus escolar com PostgreSQL",
+  "main": "servidor.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node servidor.js",
+    "dev": "node --watch servidor.js",
+    "db:migrate": "npx prisma migrate dev",
+    "db:seed": "node prisma/seed.js",
+    "db:studio": "npx prisma studio",
+    "db:reset": "npx prisma migrate reset --force"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.8.0",
+    "axios": "^1.9.0",
+    "bcryptjs": "^3.0.2",
+    "connect-pg-simple": "^10.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.5.0",
+    "express": "^5.2.1",
+    "express-session": "^1.18.1",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.8.0"
+  }
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AltaBus – Login</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="stylelogin.css" />
+</head>
+<body class="login-page">
+  <div class="login-card">
+    <img src="logo.jpg" alt="AltaBus Logo" class="logo" />
+    <h1>AltaBus</h1>
+    <p class="subtitulo">Acompanhe o ônibus escolar</p>
+
+    <form id="formLogin" onsubmit="event.preventDefault(); validarLogin()">
+      <div class="campo">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" placeholder="seu@email.com" required autocomplete="email" />
+      </div>
+      <div class="campo">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" placeholder="••••••" required autocomplete="current-password" />
+      </div>
+      <p id="msgErro" class="msg-erro" style="display:none"></p>
+      <button type="submit" class="btn-primary" id="btnLogin">Entrar</button>
+    </form>
+
+    <p class="link-cadastro">
+      Não tem conta? <a href="cadastro.html">Cadastre-se</a>
+    </p>
+  </div>
+
+  <script>
+    // Redireciona se já logado
+    fetch('/sessao', { credentials: 'include' })
+      .then(r => r.json())
+      .then(d => { if (d.logado) window.location.replace(d.usuario.tipo === 'motorista' ? 'motorista.html' : 'pontos.html'); })
+      .catch(() => {});
+
+    async function validarLogin() {
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value;
+      const btn   = document.getElementById('btnLogin');
+      const msg   = document.getElementById('msgErro');
+
+      if (!email || !senha) { mostrarErro('Preencha e-mail e senha.'); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Entrando...';
+      msg.style.display = 'none';
+
+      try {
+        const resp  = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, senha }),
+        });
+        const dados = await resp.json();
+        if (dados.success) {
+          window.location.href = dados.redirect;
+        } else {
+          mostrarErro(dados.message || 'E-mail ou senha incorretos.');
+        }
+      } catch (e) {
+        mostrarErro('Erro ao conectar com o servidor.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+      }
+    }
+
+    function mostrarErro(msg) {
+      const el = document.getElementById('msgErro');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

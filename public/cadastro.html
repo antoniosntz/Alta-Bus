@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - AltaBus</title>
+  <link rel="stylesheet" href="stylelogin.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="header-navigation">
+      <button class="btn-voltar" onclick="window.location.href='index.html'">← Voltar</button>
+    </div>
+    <img src="logo.jpg" alt="AltaBus" class="onibus-img">
+    <h2>Criar Conta</h2>
+    <p class="subtitle">Cadastre-se para acompanhar o ônibus</p>
+
+    <form class="login-form" onsubmit="event.preventDefault(); registrarUsuario();">
+      <div class="input-group">
+        <label for="nome">Nome Completo</label>
+        <div class="input-with-icon"><input type="text" id="nome" placeholder="Seu nome" required></div>
+      </div>
+      <div class="input-group">
+        <label for="email">E-mail</label>
+        <div class="input-with-icon"><input type="email" id="email" placeholder="Seu e-mail" required></div>
+      </div>
+      <div class="input-group">
+        <label for="senha">Senha</label>
+        <div class="input-with-icon"><input type="password" id="senha" placeholder="Mínimo 6 caracteres" required></div>
+      </div>
+      <button type="submit" class="btn-entrar">Cadastrar</button>
+    </form>
+  </div>
+  <script>
+    async function registrarUsuario() {
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+      try {
+        const resposta = await fetch('/cadastrar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ nome, email, senha })
+        });
+        const dados = await resposta.json();
+        if (dados.success) {
+          alert('Usuário cadastrado com sucesso!');
+          window.location.href = 'index.html';
+        } else {
+          alert(dados.message || 'Erro no cadastro.');
+        }
+      } catch {
+        alert('Erro ao cadastrar.');
+      }
+    }
+  </script>
+</body>
+</html>

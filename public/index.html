@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AltaBus</title>
+  <link rel="stylesheet" href="stylelogin.css">
+</head>
+<body>
+  <div class="login-container">
+    <img src="logo.jpg" alt="AltaBus" class="onibus-img">
+    <h2>AltaBus</h2>
+    <p class="subtitle">Acompanhe o ônibus escolar em tempo real</p>
+
+    <form class="login-form" onsubmit="event.preventDefault(); validarLogin();">
+      <div class="input-group">
+        <label for="email">E-mail</label>
+        <div class="input-with-icon">
+          <input type="email" id="email" placeholder="Digite seu e-mail" required>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="senha">Senha</label>
+        <div class="input-with-icon">
+          <input type="password" id="senha" placeholder="Digite sua senha" required>
+        </div>
+      </div>
+      <button type="submit" class="btn-entrar">Entrar</button>
+      <button type="button" class="btn-criar" onclick="window.location.href='cadastro.html'">Criar conta</button>
+    </form>
+  </div>
+  <script>
+    fetch('/sessao', { credentials: 'include' }).then(r => r.json()).then(d => {
+      if (d.logado) window.location.replace('pontos.html');
+    }).catch(() => {});
+
+    async function validarLogin() {
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+      if (!email || !senha) {
+        alert('Por favor, preencha todos os campos.');
+        return;
+      }
+      try {
+        const resposta = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, senha })
+        });
+        const dados = await resposta.json();
+        if (dados.success) {
+          window.location.href = 'pontos.html';
+        } else {
+          alert(dados.message || 'E-mail ou senha incorretos.');
+        }
+      } catch (erro) {
+        alert('Erro ao conectar com o servidor.');
+      }
+    }
+  </script>
+</body>
+</html>
