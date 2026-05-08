@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AltaBus - Rastreamento</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+  <script src="auth-guard.js"></script>
+
+  <div id="map"></div>
+
+  <div class="iphone-container">
+    <button class="btn-voltar-topo" onclick="window.location.href='pontos.html'">← Voltar</button>
+
+    <div class="logo-area">
+      <h2>AltaBus</h2>
+    </div>
+
+    <div class="ponto-card">
+      <p>Seu ponto</p>
+      <div class="ponto-nome" id="nomePonto">Carregando...</div>
+    </div>
+
+    <div class="content-info">
+      <div class="info-box">
+        <p>Distância</p>
+        <h3 id="distancia">-- km</h3>
+      </div>
+
+      <div class="info-box">
+        <p>Tempo estimado</p>
+        <h3 id="tempo">-- min</h3>
+      </div>
+
+      <div class="info-box status-box">
+        <div>
+          <p>Status</p>
+          <h3 id="status">Calculando...</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var map, markerOnibus, markerPonto;
+
+    function inicializarMapa() {
+      const mapElement = document.getElementById('map');
+      if (!mapElement) return;
+
+      map = L.map('map').setView([-20.721583, -41.010861], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      markerOnibus = L.marker([-20.721583, -41.010861]).addTo(map).bindPopup('Ônibus AltaBus');
+      markerPonto = L.marker([0, 0]).addTo(map).bindPopup('Seu Ponto');
+
+      atualizarPosicaoMapa();
+      setInterval(atualizarPosicaoMapa, 5000);
+    }
+
+    async function atualizarPosicaoMapa() {
+      const coordenadas = sessionStorage.getItem('pontoCoordenadas');
+      const pontoNome = sessionStorage.getItem('pontoNome');
+      if (!coordenadas) {
+        window.location.href = 'pontos.html';
+        return;
+      }
+
+      document.getElementById('nomePonto').textContent = pontoNome || 'Seu Ponto';
+
+      try {
+        const [pLat, pLng] = coordenadas.split(',').map(Number);
+        markerPonto.setLatLng([pLat, pLng]);
+
+        const tempoResp = await fetch(`/tempo?ponto=${encodeURIComponent(pontoNome)}`, { credentials: 'include' });
+        const tempoDados = await tempoResp.json();
+
+        if (!tempoDados.success && tempoResp.status === 401) {
+          window.location.replace('index.html');
+          return;
+        }
+
+        if (tempoDados.success) {
+          document.getElementById('distancia').textContent = `${tempoDados.distancia_km} km`;
+          document.getElementById('tempo').textContent = `${tempoDados.tempo_min} min`;
+          document.getElementById('status').textContent = tempoDados.status_texto;
+          if (tempoDados.onibus) {
+            markerOnibus.setLatLng([tempoDados.onibus.lat, tempoDados.onibus.lng]);
+          }
+        } else {
+          document.getElementById('status').textContent = tempoDados.message || 'Sem sinal';
+        }
+      } catch (e) {
+        console.error('Erro ao atualizar mapa:', e);
+        document.getElementById('status').textContent = 'Erro ao atualizar';
+      }
+    }
+
+    window.onload = function () {
+      if (typeof L !== 'undefined') {
+        inicializarMapa();
+      }
+    };
+  </script>
+</body>
+</html>

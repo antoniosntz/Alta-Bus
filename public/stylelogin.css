@@ -1,0 +1,197 @@
+/* --- Reset e Base --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, sans-serif; /* Fonte padrão e limpa */
+}
+
+body {
+    background: linear-gradient(135deg, #1d216d 0%, #301073 100%); /* Gradiente de fundo escuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: rgb(255, 255, 255);
+    padding: 20px;
+}
+
+/* --- Container de Login (O segredo do Glassmorphism) --- */
+.login-container {
+    background: rgba(255, 255, 255, 0.05); /* Fundo branco muito transparente */
+    backdrop-filter: blur(10px); /* O efeito de desfoque (vidro fumê) */
+    border-radius: 30px;
+    padding: 50px;
+    width: 380px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); /* Sombra suave para profundidade */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borda fina e transparente */
+}
+
+/* --- Imagem de Ônibus --- */
+
+.onibus-img {
+    width: 100%;             /* A imagem ocupa toda a largura disponível do container */
+    max-width: 1000000000000000px;       /* Mas nunca ultrapassa 320px, para manter a proporção */
+    height: auto;           /* Mantém a proporção da imagem original */
+    display: block;          /* Transforma a imagem num bloco, essencial para a centralização com margens */
+    margin: 0 auto 25px auto; /* Centraliza horizontalmente (auto nas laterais) e dá margem inferior */
+}
+/* --- Títulos e Legendas --- */
+h2 {
+    font-size: 24px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.7); /* Cor secundária suave */
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* --- Grupo de Inputs --- */
+.login-form {
+    text-align: left; /* Alinha labels à esquerda */
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: bold;
+}
+
+.input-with-icon {
+    position: relative; /* Para posicionar o ícone dentro do input */
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgb(0, 0, 0);
+    font-size: 18px;
+}
+
+/* --- Estilo dos Inputs --- */
+.input-with-icon input {
+    width: 100%;
+    padding: 15px 15px 15px 45px; /* Mais padding à esquerda para o ícone */
+    border-radius: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.15); /* Fundo escuro e transparente */
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    outline: none;
+}
+
+/* Placeholder color suave */
+.input-with-icon input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Efeito de foco suave no input */
+.input-with-icon input:focus {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Botões --- */
+.btn-entrar {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    background: linear-gradient(90deg, #14c8f5 0%, #1e87f1 100%); /* Gradiente azul vibrante */
+    box-shadow: 0 5px 15px rgba(20, 200, 245, 0.4); /* Sombra azul para o brilho */
+    transition: opacity 0.3s;
+    margin-top: 10px;
+}
+
+.btn-entrar:hover {
+    opacity: 0.9;
+}
+
+.btn-criar {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Borda fina e transparente */
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    background: transparent;
+    margin-top: 15px;
+    transition: background 0.3s;
+}
+
+.btn-criar:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-voltar {
+    background: transparent;
+    border: none;
+    color: #38bdf8; /* Azul claro para destacar no fundo escuro */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 15px;
+    padding: 0;
+    transition: 0.3s;
+}
+
+.btn-voltar:hover {
+    color: white;
+    transform: translateX(-5px); /* Pequena animação para a esquerda */
+}
+
+.btn-voltar i {
+    font-size: 20px;
+}
+/* Container para alinhar o topo */
+.header-navigation {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start; /* Alinha à esquerda */
+    padding-bottom: 10px;
+}
+
+.btn-voltar {
+    background: transparent;
+    border: none;
+    color: #38bdf8;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.3s;
+    padding: 5px 0;
+}
+
+.btn-voltar:hover {
+    color: white;
+    transform: translateX(-3px);
+}
+
+.btn-voltar i {
+    font-size: 22px; /* Aumenta um pouco o ícone da seta */
+}
+
+/* Garante que os botões principais tenham o cursor de clique */
+.btn-entrar, .btn-criar, .btn {
+    cursor: pointer !important;
+}
