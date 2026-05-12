@@ -7,10 +7,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+//datasource db {
+  //provider = "postgresql"
+ // url      = env("DATABASE_URL")
+//}
 
 // ─── USUÁRIOS ──────────────────────────────────────────────
 model Usuario {
@@ -73,3 +73,10 @@ enum TipoUsuario {
   motorista
   admin
 }
+
+//variavel do vercel
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
