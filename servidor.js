@@ -46,8 +46,8 @@ app.use(session({
 
 // ─── TRACCAR ───────────────────────────────────────────────
 const TRACCAR_URL   = process.env.TRACCAR_URL   || 'https://demo4.traccar.org';
-const TRACCAR_TOKEN = process.env.TRACCAR_TOKEN || 'RzBFAiBMAVwbm0fVj-WSv7oWQpn7iySaJW3xtH6IZ_PANBbKyQIhAMVNS34VL2Dn89bH2rTurqsv6F3-eOugE2qvWPyo4gPPeyJpIjo0Njg1NTQzNTEyNjIyODA2Mzg5LCJ1Ijo0OTYyNCwiZSI6IjIwMjYtMDUtMDhUMDM6MDA6MDAuMDAwKzAwOjAwIn0';
-const DEVICE_ID     = process.env.TRACCAR_DEVICE_ID || '13519';
+const TRACCAR_TOKEN = process.env.TRACCAR_TOKEN || 'RzBFAiEA0yWFqlcUdJ4faHXfMdUxJd0fC73FEMfDpw9fIXdzRcsCIBC_d_y_NHUbigAFkoYC2VZkRqmcTmHU8pgQ4iTFgMpieyJpIjozMjAxODY0NzgyODk2NjE2OTM0LCJ1Ijo1MDM2NCwiZSI6IjIwMjYtMDUtMjBUMDM6MDA6MDAuMDAwKzAwOjAwIn0';
+const DEVICE_ID     = process.env.TRACCAR_DEVICE_ID || '97194109';
 
 // ─── HELPERS ───────────────────────────────────────────────
 function distanciaKm(lat1, lon1, lat2, lon2) {
