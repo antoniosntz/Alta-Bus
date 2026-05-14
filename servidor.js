@@ -111,6 +111,9 @@ app.post('/login', async (req, res) => {
     const usuario = await prisma.usuario.findUnique({
       where: { email: String(email).trim().toLowerCase() },
     });
+
+    console.log(usuario);
+    
     if (!usuario || !usuario.ativo) {
       return res.status(401).json({ success: false, message: 'E-mail ou senha incorretos.' });
     }
