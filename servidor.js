@@ -14,11 +14,14 @@ const axios          = require('axios');
 const { PrismaClient } = require('@prisma/client');
 
 const app    = express();
+<<<<<<< HEAD
 
 // Necessário quando o sistema roda atrás do proxy da Vercel.
 // Sem isso, o cookie seguro da sessão pode não ser salvo em produção.
 app.set('trust proxy', 1);
 
+=======
+>>>>>>> 417d849318ad75ccf24f305377dcd440a2d896b5
 const prisma = new PrismaClient();
 const PORT   = process.env.PORT || 3000;
 
@@ -52,9 +55,13 @@ app.use(session({
 // ─── TRACCAR ───────────────────────────────────────────────
 const TRACCAR_URL   = process.env.TRACCAR_URL   || 'https://demo4.traccar.org';
 const TRACCAR_TOKEN = process.env.TRACCAR_TOKEN || 'RzBFAiEA0yWFqlcUdJ4faHXfMdUxJd0fC73FEMfDpw9fIXdzRcsCIBC_d_y_NHUbigAFkoYC2VZkRqmcTmHU8pgQ4iTFgMpieyJpIjozMjAxODY0NzgyODk2NjE2OTM0LCJ1Ijo1MDM2NCwiZSI6IjIwMjYtMDUtMjBUMDM6MDA6MDAuMDAwKzAwOjAwIn0';
+<<<<<<< HEAD
 // Mantém o mesmo Device ID usado no README e no seed do banco.
 // Antes estava 97194109, enquanto o sistema cadastra o veículo como 13519.
 const DEVICE_ID     = String(process.env.TRACCAR_DEVICE_ID || '13519').trim();
+=======
+const DEVICE_ID     = process.env.TRACCAR_DEVICE_ID || '97194109';
+>>>>>>> 417d849318ad75ccf24f305377dcd440a2d896b5
 
 // ─── HELPERS ───────────────────────────────────────────────
 function distanciaKm(lat1, lon1, lat2, lon2) {
@@ -68,6 +75,7 @@ function distanciaKm(lat1, lon1, lat2, lon2) {
 }
 
 async function buscarLocalizacaoTraccar() {
+<<<<<<< HEAD
   try {
     const resp = await axios.get(`${TRACCAR_URL}/api/positions`, {
       params: { deviceId: DEVICE_ID },
@@ -102,6 +110,20 @@ async function buscarLocalizacaoTraccar() {
 
     throw err;
   }
+=======
+  const resp = await axios.get(`${TRACCAR_URL}/api/positions?deviceId=${DEVICE_ID}`, {
+    headers: { Authorization: `Bearer ${TRACCAR_TOKEN}`, Accept: 'application/json' },
+    timeout: 8000,
+  });
+  if (!resp.data || resp.data.length === 0) return null;
+  const gps = resp.data[0];
+  return {
+    lat:       Number(gps.latitude),
+    lng:       Number(gps.longitude),
+    speed:     gps.speed ? Number((gps.speed * 1.852).toFixed(1)) : 0,
+    fixTime:   gps.fixTime || null,
+  };
+>>>>>>> 417d849318ad75ccf24f305377dcd440a2d896b5
 }
 
 // ─── MIDDLEWARE DE AUTENTICAÇÃO ─────────────────────────────
@@ -141,6 +163,10 @@ app.post('/login', async (req, res) => {
       where: { email: String(email).trim().toLowerCase() },
     });
 
+<<<<<<< HEAD
+=======
+    console.log(usuario);
+>>>>>>> 417d849318ad75ccf24f305377dcd440a2d896b5
     
     if (!usuario || !usuario.ativo) {
       return res.status(401).json({ success: false, message: 'E-mail ou senha incorretos.' });
@@ -149,6 +175,7 @@ app.post('/login', async (req, res) => {
     if (!ok) {
       return res.status(401).json({ success: false, message: 'E-mail ou senha incorretos.' });
     }
+<<<<<<< HEAD
     req.session.usuario = {
       id: usuario.id,
       nome: usuario.nome,
@@ -171,6 +198,11 @@ app.post('/login', async (req, res) => {
 
       return res.json({ success: true, tipo: usuario.tipo, redirect });
     });
+=======
+    req.session.usuario = { id: usuario.id, nome: usuario.nome, email: usuario.email, tipo: usuario.tipo };
+    const redirect = usuario.tipo === 'motorista' ? 'motorista.html' : 'pontos.html';
+    return res.json({ success: true, tipo: usuario.tipo, redirect });
+>>>>>>> 417d849318ad75ccf24f305377dcd440a2d896b5
   } catch (err) {
     console.error('Erro no login:', err);
     return res.status(500).json({ success: false, message: 'Erro interno no servidor.' });
@@ -233,8 +265,12 @@ app.get('/localizacao-atual', requerLogin, async (req, res) => {
     if (!loc) return res.json({ success: false, message: 'Aguardando sinal GPS...' });
     return res.json({ success: true, ...loc });
   } catch (err) {
+<<<<<<< HEAD
     console.error('Erro em /localizacao-atual:', err.message);
     return res.status(502).json({ success: false, message: err.message || 'Erro ao consultar Traccar.' });
+=======
+    return res.status(500).json({ success: false, message: 'Erro ao consultar Traccar.' });
+>>>>>>> 417d849318ad75ccf24f305377dcd440a2d896b5
   }
 });
 
@@ -277,10 +313,14 @@ app.get('/tempo', requerLogin, async (req, res) => {
     });
   } catch (err) {
     console.error('Erro em /tempo:', err.message);
+<<<<<<< HEAD
     return res.status(502).json({
       success: false,
       message: err.message || 'Erro ao calcular tempo.',
     });
+=======
+    return res.status(500).json({ success: false, message: 'Erro ao calcular tempo.' });
+>>>>>>> 417d849318ad75ccf24f305377dcd440a2d896b5
   }
 });
 
@@ -291,8 +331,12 @@ app.get('/api/rastreio', requerLogin, async (req, res) => {
     if (!loc) return res.json({ success: false, message: 'Aguardando sinal GPS...' });
     return res.json({ success: true, ...loc });
   } catch (err) {
+<<<<<<< HEAD
     console.error('Erro em /api/rastreio:', err.message);
     return res.status(502).json({ success: false, message: err.message || 'Erro ao consultar Traccar.' });
+=======
+    return res.status(500).json({ success: false, message: 'Erro ao consultar Traccar.' });
+>>>>>>> 417d849318ad75ccf24f305377dcd440a2d896b5
   }
 });
 

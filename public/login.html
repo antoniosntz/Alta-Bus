@@ -35,7 +35,11 @@
     // Redireciona se já logado
     fetch('/sessao', { credentials: 'include' })
       .then(r => r.json())
+<<<<<<< HEAD
       .then(d => { if (d.logado) window.location.replace('pontos.html'); })
+=======
+      .then(d => { if (d.logado) window.location.replace(d.usuario.tipo === 'motorista' ? 'motorista.html' : 'pontos.html'); })
+>>>>>>> 417d849318ad75ccf24f305377dcd440a2d896b5
       .catch(() => {});
 
     async function validarLogin() {
