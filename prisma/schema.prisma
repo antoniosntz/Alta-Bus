@@ -1,0 +1,82 @@
+// ============================================================
+// AltaBus – schema.prisma
+// Banco: PostgreSQL 16 local (Windows 11)
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+//datasource db {
+  //provider = "postgresql"
+ // url      = env("DATABASE_URL")
+//}
+
+// ─── USUÁRIOS ──────────────────────────────────────────────
+model Usuario {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(120)
+  email      String    @unique @db.VarChar(200)
+  senhaHash  String    @map("senha_hash") @db.VarChar(255)
+  tipo       TipoUsuario @default(cliente)
+  ativo      Boolean   @default(true)
+  criadoEm  DateTime  @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  @@map("usuarios")
+}
+
+// ─── PONTOS DE EMBARQUE ────────────────────────────────────
+model Ponto {
+  id        Int     @id @default(autoincrement())
+  nome      String  @unique @db.VarChar(150)
+  latitude  Float
+  longitude Float
+  ativo     Boolean @default(true)
+  ordem     Int     @default(0)
+
+  @@map("pontos")
+}
+
+// ─── VEÍCULO / ÔNIBUS ──────────────────────────────────────
+model Veiculo {
+  id              Int       @id @default(autoincrement())
+  nome            String    @db.VarChar(100)
+  placa           String?   @db.VarChar(20)
+  deviceIdTraccar String?   @map("device_id_traccar") @db.VarChar(50)
+  ativo           Boolean   @default(true)
+  criadoEm       DateTime  @default(now()) @map("criado_em")
+
+  localizacoes LocHistorico[]
+
+  @@map("veiculos")
+}
+
+// ─── HISTÓRICO DE LOCALIZAÇÃO ──────────────────────────────
+model LocHistorico {
+  id         Int       @id @default(autoincrement())
+  veiculoId  Int       @map("veiculo_id")
+  latitude   Float
+  longitude  Float
+  velocidade Float?
+  fixTime    DateTime? @map("fix_time")
+  recebidoEm DateTime @default(now()) @map("recebido_em")
+
+  veiculo Veiculo @relation(fields: [veiculoId], references: [id], onDelete: Cascade)
+
+  @@index([veiculoId, recebidoEm])
+  @@map("loc_historico")
+}
+
+enum TipoUsuario {
+  cliente
+  motorista
+  admin
+}
+
+//variavel do vercel
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+

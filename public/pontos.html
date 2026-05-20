@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escolha seu ponto - AltaBus</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="corpo-selecao">
+ <script src="auth-guard.js"></script>
+
+  <div class="wrapper-centralizado">
+    <div class="escolha-container">
+     <a href="index.html" class="btn-voltar-flutuante">← Voltar</a>
+      <div class="logo-area"><h2>AltaBus</h2></div>
+      <h3>Escolha seu ponto</h3>
+      <p>Selecione onde você vai pegar o ônibus para acompanhar a chegada em tempo real.</p>
+
+      <select id="pontoSelect">
+        <option value="">Clique para selecionar...</option>
+      </select>
+
+      <button class="btn-continuar" onclick="continuar()">Continuar</button>
+    </div>
+  </div>
+
+  <script>
+    async function carregarPontos() {
+      try {
+        const resp = await fetch('/pontos', { credentials: 'include' });
+        const dados = await resp.json();
+        if (!dados.success) {
+          window.location.replace('index.html');
+          return;
+        }
+        const select = document.getElementById('pontoSelect');
+        dados.pontos.forEach((p) => {
+          const option = document.createElement('option');
+          option.value = `${p.latitude},${p.longitude}`;
+          option.textContent = p.nome;
+          select.appendChild(option);
+        });
+      } catch (e) {
+        window.location.replace('index.html');
+      }
+    }
+
+    function continuar() {
+      const select = document.getElementById('pontoSelect');
+      if (!select || !select.value) {
+        alert('Selecione um ponto!');
+        return;
+      }
+      sessionStorage.setItem('pontoCoordenadas', select.value);
+      sessionStorage.setItem('pontoNome', select.options[select.selectedIndex].text);
+      window.location.href = 'cliente.html';
+    }
+
+    carregarPontos();
+  </script>
+</body>
+</html>
